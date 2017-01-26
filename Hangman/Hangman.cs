@@ -14,10 +14,9 @@ namespace Hangman
         List<char> SecretWordFull { get; set; } = new List<char>();
         List<char> SecretWordHidden { get; set; } = new List<char>();
 
-
         public void StartGame()
         {
-            //DisplayIntro();
+            DisplayIntro();
             SetAvailableLettersToGuessToDefault();
             SetSecretWord();
 
@@ -45,12 +44,21 @@ namespace Hangman
 
                 UpdateRemainingLetters(guessLetter);
             }
+
+            GameOver();
         }
 
         public void DisplayIntro()
         {
-            Console.WriteLine(" Welcome to Hangman, This will be an Intro Screen Eventually");
-            Console.WriteLine(" Press enter to continue");
+
+            Console.WriteLine(" _   _    ___    _   _   ____   ___  ___   ___    _   _ ");
+            Console.WriteLine("| | | |  / _ \\  | \\ | | | __ \\  |  \\/  |  / _ \\  | \\ | |");
+            Console.WriteLine("| |_| | / /_\\ \\ |  \\| | | | \\/  | .  . | / /_\\ \\ |  \\| |");
+            Console.WriteLine("|  _| | |  _  | | . ` | | | __  | |\\/| | |  _  | | . ` |");
+            Console.WriteLine("| | | | | | | | | |\\  | | |_\\ \\ | |  | | | | | | | |\\  |");
+            Console.WriteLine("\\_| |_/ \\_| |_/ \\_| \\_/ \\_____/ \\_|  |_/ \\_| |_/ \\_| \\_/");
+            Console.WriteLine("                   BY  NATHAN RATHBUN                   ");
+            Console.WriteLine("                   ENTER TO  CONTINUE                   ");
             Console.ReadLine();
         }
 
@@ -117,7 +125,7 @@ namespace Hangman
 
         public bool AllChancesAreUsed()
         {
-            if (guess.ChancesLeft == 0)
+            if (guess.ChancesLeft < 0)
             {
                 return true;
             }
@@ -131,6 +139,25 @@ namespace Hangman
                 return true;
             }
             return false;
+        }
+
+        public void GameOver()
+        {
+            if (AllChancesAreUsed())
+            {
+                SecretWordHidden = SecretWordFull;
+                DisplayHangmanVisual();
+
+                Console.WriteLine("YOU LOSE, LOSER");
+                Console.ReadLine();
+            }
+            else
+            {
+                DisplayHangmanVisual();
+
+                Console.WriteLine("YOU WIN, WINNER");
+                Console.ReadLine();
+            }
         }
 
         public void DisplayHangmanVisual()
