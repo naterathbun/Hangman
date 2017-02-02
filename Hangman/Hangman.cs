@@ -8,7 +8,7 @@ namespace Hangman
 {
     class Hangman
     {
-        Guesses guess = new Guesses(8);
+        Guesses guess = new Guesses(5);
 
         public string AvailableLettersToGuess { get; set; } = string.Empty;
         List<char> SecretWordFull { get; set; } = new List<char>();
@@ -75,7 +75,15 @@ namespace Hangman
             for (int i = 0; i < secretWordString.Length; i++)
             {
                 this.SecretWordFull.Add(Convert.ToChar(secretWordString[i].ToString().ToUpper()));
-                this.SecretWordHidden.Add('_');
+
+                if (secretWordString[i] == ' ')
+                {
+                    this.SecretWordHidden.Add(' ');
+                }
+                else
+                {
+                    this.SecretWordHidden.Add('_');
+                }
             }
         }
 
@@ -146,6 +154,7 @@ namespace Hangman
             if (AllChancesAreUsed())
             {
                 SecretWordHidden = SecretWordFull;
+
                 DisplayHangmanVisual();
 
                 Console.WriteLine("YOU LOSE, LOSER");
