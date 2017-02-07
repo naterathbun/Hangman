@@ -33,19 +33,24 @@ namespace Hangman
 
                 guessLetter = GetPlayerGuess();
 
-                if (IsLetterGuessInSecretWord(guessLetter))
-                {
-                    RevealCorrectLetter(guessLetter);
-                }
-                else if (AvailableLettersToGuess.Contains(guessLetter))
-                {
-                    guess.DecreaseChancesLeft();
-                }
+                RevealLetterIfGuessIsInSecretWord(guessLetter);
 
                 UpdateRemainingLetters(guessLetter);
             }
 
-            GameOver();
+            DisplayGameOverMessages();
+        }
+
+        public void RevealLetterIfGuessIsInSecretWord(char guessLetter)
+        {
+            if (LetterGuessIsInSecretWord(guessLetter))
+            {
+                RevealCorrectLetter(guessLetter);
+            }
+            else if (AvailableLettersToGuess.Contains(guessLetter))
+            {
+                guess.DecreaseChancesLeft();
+            }
         }
 
         public void DisplayIntro()
@@ -90,10 +95,10 @@ namespace Hangman
         public char GetPlayerGuess()
         {
             Console.WriteLine("Enter next letter to guess: ");
-            return guess.TakePlayerLetterInput();
+            return guess.TakePlayerInputReturnValidCharacter();
         }
 
-        public bool IsLetterGuessInSecretWord(char playerLetterGuess)
+        public bool LetterGuessIsInSecretWord(char playerLetterGuess)
         {
             if (SecretWordFull.Contains(playerLetterGuess))
             {
@@ -118,16 +123,16 @@ namespace Hangman
             }
         }
 
-        public string PrintHiddenWord()
+        public string DisplayHiddenWordOnScreen()
         {
-            string hiddenWordString = string.Empty;
+            string hiddenWord = string.Empty;
 
             for (int i = 0; i < SecretWordHidden.Count; i++)
             {
-                hiddenWordString += SecretWordHidden[i];
-                hiddenWordString += " ";
+                hiddenWord += SecretWordHidden[i];
+                hiddenWord += " ";
             }
-            return hiddenWordString;
+            return hiddenWord;
 
         }
 
@@ -149,24 +154,37 @@ namespace Hangman
             return false;
         }
 
-        public void GameOver()
+        public void DisplayGameOverMessages()
         {
+
             if (AllChancesAreUsed())
             {
-                SecretWordHidden = SecretWordFull;
-
+                RevealSecretWordAfterLoss();
                 DisplayHangmanVisual();
-
-                Console.WriteLine("YOU LOSE, LOSER");
-                Console.ReadLine();
+                DisplayYouLoseMessage();
             }
             else
             {
                 DisplayHangmanVisual();
-
-                Console.WriteLine("YOU WIN, WINNER");
-                Console.ReadLine();
+                DisplayYouWinMessage();
             }
+        }
+
+        public static void DisplayYouWinMessage()
+        {
+            Console.WriteLine("YOU WIN, WINNER");
+            Console.ReadLine();
+        }
+
+        public static void DisplayYouLoseMessage()
+        {
+            Console.WriteLine("YOU LOSE, LOSER");
+            Console.ReadLine();
+        }
+
+        public void RevealSecretWordAfterLoss()
+        {
+            SecretWordHidden = SecretWordFull;
         }
 
         public void DisplayHangmanVisual()
@@ -181,7 +199,7 @@ namespace Hangman
             Console.WriteLine("          ||                         ");
             Console.WriteLine("   _______||__________               ");
             Console.WriteLine("  |                   |              ");
-            Console.WriteLine($"  |   Misses Left: {guess.ChancesLeft}  |   {PrintHiddenWord()}");
+            Console.WriteLine($"  |   Misses Left: {guess.ChancesLeft}  |   {DisplayHiddenWordOnScreen()}");
             Console.WriteLine("  |___________________|              ");
             Console.WriteLine("\n   _____________________________________________________");
             Console.WriteLine(" /|                                                     |\\");

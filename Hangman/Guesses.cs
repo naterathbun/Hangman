@@ -20,18 +20,18 @@ namespace Hangman
             this.ChancesLeft -= 1;
         }
 
-        public char TakePlayerLetterInput() // Checks player input, returns that char if valid letter (aA-zZ) only
+        public char TakePlayerInputReturnValidCharacter() 
         {
-            char playerInput;
+            char playerLetterInput;
             bool isInputValid = false;
 
             while (!isInputValid)
             {
-                isInputValid = char.TryParse(Console.ReadLine().ToUpper(), out playerInput);
-                if (char.IsLetter(playerInput))
+                isInputValid = char.TryParse(Console.ReadLine().ToUpper(), out playerLetterInput);
+                if (char.IsLetter(playerLetterInput))
                 {
                     isInputValid = true;
-                    return playerInput;
+                    return playerLetterInput;
                 }
                 else
                 {
